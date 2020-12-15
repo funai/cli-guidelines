@@ -228,6 +228,6 @@ _参考資料: [The Anti-Mac User Interface (Don Gentner and Jakob Nielsen)](htt
 私たちも、ルールを破ることにかけては、他のみんなと同じスネの傷を持つ。
 
 いつかあなたもまた、ルールを破らざるをえない時が来るだろう。
-やるときは、はっきりとした意図と、明確な目的を持ってやることだ。
+やるなら、はっきりとした意図と、明確な目的を持ってやることだ。
 
 > “Abandon a standard when it is demonstrably harmful to productivity or user satisfaction.” — Jef Raskin, [The Humane Interface](https://en.wikipedia.org/wiki/The_Humane_Interface)
