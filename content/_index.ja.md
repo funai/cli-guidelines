@@ -230,7 +230,7 @@ _参考資料: [The Anti-Mac User Interface (Don Gentner and Jakob Nielsen)](htt
 いつかあなたもまた、ルールを破らざるをえない時が来るだろう。
 やるなら、はっきりとした意図と、明確な目的を持ってやることだ。
 
-> 「それが生産性とユーザの満足度を明らかに損なっているときは常識を捨てるべきである。」“Abandon a standard when it is demonstrably harmful to productivity or user satisfaction.” — Jef Raskin, [The Humane Interface](https://en.wikipedia.org/wiki/The_Humane_Interface)
+> 「生産性とユーザの満足度が明らかに損なわれているときは、常識を捨てるべきである。」 — Jef Raskin, [The Humane Interface](https://en.wikipedia.org/wiki/The_Humane_Interface)
 
 ## ガイドライン {#guidelines}
 
@@ -275,3 +275,5 @@ _参考資料: [The Anti-Mac User Interface (Don Gentner and Jakob Nielsen)](htt
 **メッセージは `stderr` に出すべし。**
 ログメッセージ、エラーなどは、すべて `stdout` に出すこと。
 こうすれば、コマンドをパイプでつないだとき、メッセージはユーザに表示されるが、次のコマンドには送信されない。
+
+
