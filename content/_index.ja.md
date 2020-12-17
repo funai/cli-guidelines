@@ -258,7 +258,7 @@ _参考資料: [The Anti-Mac User Interface (Don Gentner and Jakob Nielsen)](htt
 使用している言語の標準機能か、またはよくできたサードパーティ製。
 それらは普通、引数を受け取ってフラグをパースしたり、ヘルプテキストを表示したり、中には気を利かせてスペルの候補を出してくれたりするのが普通だ。
 
-私たちのお気に入りは以下のもの：
+私たちのお気に入りは以下：
 * Go: [Cobra](https://github.com/spf13/cobra), [cli](https://github.com/urfave/cli)
 * Node: [oclif](https://oclif.io/)
 * Python: [Click](https://click.palletsprojects.com/), [Typer](https://github.com/tiangolo/typer)
@@ -276,4 +276,49 @@ _参考資料: [The Anti-Mac User Interface (Don Gentner and Jakob Nielsen)](htt
 ログメッセージ、エラーなどは、すべて `stdout` に出すこと。
 こうすれば、コマンドをパイプでつないだとき、メッセージはユーザに表示されるが、次のコマンドには送信されない。
 
+### ヘルプ {#help}
 
+**オプションが指定されていないとき、 `-h` フラグ、または `--help` フラグがついているときはヘルプ・テキストを表示する。**
+
+**デフォルトで出すヘルプ・メッセージは簡潔に。**
+可能であれば、 `myapp` または `myapp subcommand` で起動したときは、デフォルトでヘルプを表示する。
+よほどシンプルなプログラムで、デフォルトの機能が明白なもの（例： `ls`）や、対話的に入力を読み込むプログラム（例：`cat`）は例外だ。
+
+簡潔なヘルプには以下の事項だけを入れておく：
+
+- そのプログラムにどんな機能があるかの説明。
+- 起動方法の実例を1、2件。
+- フラグの説明、大量にある場合は除く。
+- 詳しい情報は `--help` フラグで得られることの説明
+
+`jq` はこれがうまくできている。
+ `jq` とだけタイプすると、初歩的な説明と実例が表示され、フラグの完全な説明を見たい人は `jq --help` と打つように誘導される：
+
+```
+$ jq
+jq - commandline JSON processor [version 1.6]
+
+Usage:    jq [options] <jq filter> [file...]
+    jq [options] --args <jq filter> [strings...]
+    jq [options] --jsonargs <jq filter> [JSON_TEXTS...]
+
+jq is a tool for processing JSON inputs, applying the given filter to
+its JSON text inputs and producing the filter's results as JSON on
+standard output.
+
+The simplest filter is ., which copies jq's input to its output
+unmodified (except for formatting, but note that IEEE754 is used
+for number representation internally, with all that that implies).
+
+For more advanced filters see the jq(1) manpage ("man jq")
+and/or https://stedolan.github.io/jq
+
+Example:
+
+    $ echo '{"foo": 0}' | jq .
+    {
+        "foo": 0
+    }
+
+For a listing of options, use jq --help.
+```
