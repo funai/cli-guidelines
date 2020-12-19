@@ -322,3 +322,6 @@ Example:
 
 For a listing of options, use jq --help.
 ```
+
+ ** `-h` and `--help` が渡されたら完全版のヘルプを表示する。**
+ 
