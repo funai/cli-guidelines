@@ -343,3 +343,6 @@ $ myapp help subcommand
 $ myapp subcommand --help
 $ myapp subcommand -h
 ```
+
+**フィードバックとバグ報告ためのサポート窓口を作る**
+ヘルプ・テキストの上部に、ウェブサイトか、GitHubへのリンクを置くのが通例。
