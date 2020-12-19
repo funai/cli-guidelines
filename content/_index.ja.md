@@ -336,3 +336,10 @@ $ myapp -h
 何が来ても `-h` は無効にならない。
 
  `git` 的なコマンドなら、以下でもヘルプを表示する：
+
+```
+$ myapp help
+$ myapp help subcommand
+$ myapp subcommand --help
+$ myapp subcommand -h
+```
