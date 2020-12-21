@@ -362,3 +362,94 @@ $ myapp subcommand -h
 詳細な上級者向けの実例があると役に立つが、ヘルプ・テキストが長過ぎるのも考えものだ。
 
 より複雑なユースケース、たとえば他のツールとの連携といった話題には、別途、それ向けのチュートリアルを用意することも考慮したい。
+
+**man ページは割愛する。**
+このガイドラインに準拠してヘルプとドキュメントを作成するなら、man ページは必要ないと確信する。
+man ページの利用者は限られているし、Windows では動かない。
+使っている CLI フレームワークやパッケージ・マネジャーに man ページ出力機能があるなら、それを利用すればいいだろう。そうでないなら、ウェブ文書や組み込みのヘルプ・テキストの改善に注力したほうがいい。
+
+_Citation: [12 Factor CLI Apps](https://medium.com/@jdxcode/12-factor-cli-apps-dd3c227a0e46)._
+
+**ヘルプ・テキストが長文になる場合、ページャーにパイプすること。**
+ `man` が重宝するのはこの一点だ。
+後述の「出力」セクションのアドバイスを参照のこと。
+
+**ヘルプ・テキストの冒頭には、もっとも汎用的なフラグとコマンドを掲載する。**
+フラグがたくさんあるのはかまわない。だが、その中でもっともよく利用されるものを一番最初に表示しよう。
+たとえば、Git コマンドでは、使い始めに用いるコマンドと、最もよく利用されるサブコマンドを最初に表示している：
+
+```
+$ git
+usage: git [--version] [--help] [-C <path>] [-c <name>=<value>]
+           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]
+           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--bare]
+           [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]
+           <command> [<args>]
+
+These are common Git commands used in various situations:
+
+start a working area (see also: git help tutorial)
+   clone      Clone a repository into a new directory
+   init       Create an empty Git repository or reinitialize an existing one
+
+work on the current change (see also: git help everyday)
+   add        Add file contents to the index
+   mv         Move or rename a file, a directory, or a symlink
+   reset      Reset current HEAD to the specified state
+   rm         Remove files from the working tree and from the index
+
+examine the history and state (see also: git help revisions)
+   bisect     Use binary search to find the commit that introduced a bug
+   grep       Print lines matching a pattern
+   log        Show commit logs
+   show       Show various types of objects
+   status     Show the working tree status
+…
+```
+
+**ヘルプ・テキストは適切に装飾する。**
+見出しを太字にしておくと流し読みがしやすい。
+だが、ターミナルに依存しない方法を採用するようにしよう。さもないと、ユーザはエスケープ文字の嵐を眺めることになる。
+
+<pre>
+<code>
+<strong>$ heroku apps --help</strong>
+list your apps
+
+<strong>USAGE</strong>
+  $ heroku apps
+
+<strong>OPTIONS</strong>
+  -A, --all          include apps in all teams
+  -p, --personal     list apps in personal account when a default team is set
+  -s, --space=space  filter by space
+  -t, --team=team    team to use
+  --json             output in json format
+
+<strong>EXAMPLES</strong>
+  $ heroku apps
+  === My Apps
+  example
+  example2
+
+  === Collaborated Apps
+  theirapp   other@owner.name
+
+<strong>COMMANDS</strong>
+  apps:create     creates a new app
+  apps:destroy    permanently destroy an app
+  apps:errors     view app errors
+  apps:favorites  list favorited apps
+  apps:info       show detailed app information
+  apps:join       add yourself to a team app
+  apps:leave      remove yourself from a team app
+  apps:lock       prevent team members from joining an app
+  apps:open       open the app in a web browser
+  apps:rename     rename an app
+  apps:stacks     show the list of available stacks
+  apps:transfer   transfer applications to another user or team
+  apps:unlock     unlock an app so any team member can join
+</code>
+</pre>
+
+注：`heroku apps --help` をページャーにパイプすると、コマンドからはエスケープ文字が出力されなくなる。
