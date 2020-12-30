@@ -519,6 +519,120 @@ JSON なら、プレーンテキストをより構造的にできるので、複
 スクリプトの中で利用される場合は納得できる挙動だが、人間が利用するときはハングしたり、壊れたように見える。
 例えば、長い時間がかかるときでも `cp` は何も出力しない。
 
-デフォルトの動作として、何も出力しないのがベストだと言える状況はめったにない。だが、だいたいにおいて少なめにして失敗する方がましである。
+デフォルトの動作として、何も出力しないのがベストだと言える状況はめったにない。だが、だいたいにおいて簡素すぎるくらいでちょうどいい。
 
 まったく出力が不要な場合は（たとえば、シェルスクリプトの中で利用する場合）、 `stderr` を `/dev/null` にリダイレクトする手間を省くために、 `-q` オプションを設けて、重要でない出力はすべて抑止するようにする。
+
+**状態が変わるときはユーザに告知する。**
+コマンドがシステムの状態を変えるときは、何が起こったのか説明することが特に役に立つ。ユーザが頭の中でシステムの状態を思い描くことができるからだ。ユーザが求めていたものと実際の結果が直接対応していない場合は特にそうである。
+
+例えば、`git push` は、今何をしているのか、リモートのブランチが新しくどういう状態になったのかを正確に説明している：
+
+```
+$ git push
+Enumerating objects: 18, done.
+Counting objects: 100% (18/18), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (10/10), done.
+Writing objects: 100% (10/10), 2.09 KiB | 2.09 MiB/s, done.
+Total 10 (delta 8), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (8/8), completed with 8 local objects.
+To github.com:replicate/replicate.git
+ + 6c22c90...a2a5217 bfirsh/fix-delete -> bfirsh/fix-delete
+```
+
+**システムの現在の状態をわかりやすくする。**
+プログラムに複雑な状態変化があり、それがファイルシステム上でひと目でわかるようになっていない場合、これをわかりやすくしておく必要がある。
+
+例えば、`git status` は Git レポジトリの現状について、可能な限りの情報に加えて、その状態を変えるためのヒントもいくつか提示してくれる。
+
+```
+$ git status
+On branch bfirsh/fix-delete
+Your branch is up to date with 'origin/bfirsh/fix-delete'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   cli/pkg/cli/rm.go
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
+
+**起動すべきコマンドをサジェストする。**
+ワークフローがいくつかのコマンドで構成されている場合、次に起動すべきコマンドをいくつかサジェストしてあげると、プログラムの利用法の理解が進むし、新しい機能を発見するきっかけにもなる。
+たとえば、上記の `git status` では、今見ている状態を変更するためのコマンドがいくつかサジェストされている。
+
+**そのプログラムが境界線を超えて外の世界にアクションする場合は、明示的に行う。**
+これには次のような事項が含まれる：
+
+- 引数で明示的に指定していないファイルに対して読み書きする（キャッシュのような、そのプログラムの内部状態を保存するファイルは除く）
+- リモートのサーバと通信する。例：ファイルのダウンロードなど。
+
+**情報密度を増やす、アスキーアートで！**
+例えば、`ls` はパーミッションを一覧で表示する。
+初見ではほとんどの情報は無視できる。
+仕組みがだんだんわかってくると、徐々に、より多くのパターンに気づくようになる。
+
+```
+-rw-r--r-- 1 root root     68 Aug 22 23:20 resolv.conf
+lrwxrwxrwx 1 root root     13 Mar 14 20:24 rmt -> /usr/sbin/rmt
+drwxr-xr-x 4 root root   4.0K Jul 20 14:51 security
+drwxr-xr-x 2 root root   4.0K Jul 20 14:53 selinux
+-rw-r----- 1 root shadow  501 Jul 20 14:44 shadow
+-rw-r--r-- 1 root root    116 Jul 20 14:43 shells
+drwxr-xr-x 2 root root   4.0K Jul 20 14:57 skel
+-rw-r--r-- 1 root root      0 Jul 20 14:43 subgid
+-rw-r--r-- 1 root root      0 Jul 20 14:43 subuid
+```
+
+**無造作に色を使わない。**
+例えば、テキストの一部を目立たせるためにハイライトしたくなるかもしれないし、エラーの表示には赤字を使いたくなるかもしれない。
+くれぐれもやりすぎないように。あらゆるものに色がついていると、色の意味がなくなってしまい、読みにくくなるだけだ。
+
+**プログラムがターミナル上で使われていない場合、もしくはユーザがそう希望した場合は、色を使わない。**
+以下のような場合は、色をオフにする：
+
+- `stdout` または `stderr` が、対話式のターミナル（TTY）になっていない場合。
+  個別に判断するのがベストだ。`stdout` が別のプログラムにパイプでつながれているのなら、`stderr` には色がある方がよい。
+- 環境変数 `NO_COLOR` が指定されている場合。
+- 環境変数 `TERM` の値として `dumb` が設定されている場合。
+- オプション `--no-color` が指定されている場合。
+- 特定のプログラムだけ色をオフにしたい場合に備えて、環境変数 `MYAPP_NO_COLOR` を追加してもいい。
+
+_くわしくは： [no-color.org](https://no-color.org/), [12 Factor CLI Apps](https://medium.com/@jdxcode/12-factor-cli-apps-dd3c227a0e46)_
+
+**`stdout` が対話式のターミナル出ない場合、アニメーションは表示しない。**
+こうすれば、プログレスバーが、CI のログ出力にクリスマスツリーのような形で残ることはなくなる。
+
+**わかりやすくなるならシンボルや絵文字を利用する。**
+絵は言葉に勝ることもある。目立たせたいものがあるとか、注意を引きたいとか、あるいはちょっとキャラを立てたい、といったような場合だ。
+ただし、ご注意を。たやすく度を越して、プログラムがごちゃごちゃしたり、おもちゃのように見えてしまったりする元になる。
+
+例えば、[yubikey-agent](https://github.com/FiloSottile/yubikey-agent) は出力を構造化するために絵文字を使っているので、画面が文字だらけにならない。重要な情報には ❌ がついて、目立つようになっている。
+
+```shell-session
+$ yubikey-agent -setup
+🔐 The PIN is up to 8 numbers, letters, or symbols. Not just numbers!
+❌ The key will be lost if the PIN and PUK are locked after 3 incorrect tries.
+
+Choose a new PIN/PUK: 
+Repeat the PIN/PUK: 
+
+🧪 Retriculating splines …
+
+✅ Done! This YubiKey is secured and ready to go.
+🤏 When the YubiKey blinks, touch it to authorize the login.
+
+🔑 Here's your new shiny SSH public key:
+ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBCEJ/
+UwlHnUFXgENO3ifPZd8zoSKMxESxxot4tMgvfXjmRp5G3BGrAnonncE7Aj11pn3SSYgEcrrn2sMyLGpVS0=
+
+💭 Remember: everything breaks, have a backup plan for when this YubiKey does.
+```
+
+**そのソフトウェアの制作者にしかわからないような情報は、デフォルトでは出さない。**
+プログラムの挙動を、（制作者である）あなたが理解するためにしか役に立たない出力があるとしたら、それはほぼ確実に、デフォルトで通常のユーザに出してはならない情報だ。verboseモードの場合だけ出す。
+
+外部の人や、プロジェクトの新規参加者に、ユーザビリティ・フィードバックをもらえるよう呼びかけよう。
+コードに近すぎるために見えなくなっている重要な問題に気付かせてくれるだろう。
