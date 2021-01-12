@@ -675,3 +675,7 @@ UwlHnUFXgENO3ifPZd8zoSKMxESxxot4tMgvfXjmRp5G3BGrAnonncE7Aj11pn3SSYgEcrrn2sMyLGpV
 
 **バグ報告に手間がかからないようにする。**
 ひとつうまいやり方として、URLを用意して、可能な限りの情報をあらかじめ埋めておくという方法がある。
+
+### 引数とフラグ {#arguments-and-flags}
+
+用語に関するメモ：
