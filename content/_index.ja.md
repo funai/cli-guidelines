@@ -682,11 +682,10 @@ UwlHnUFXgENO3ifPZd8zoSKMxESxxot4tMgvfXjmRp5G3BGrAnonncE7Aj11pn3SSYgEcrrn2sMyLGpV
 
 - _引数_, または _args_, は、コマンドに対する位置パラメータである。
   例えば、`cp` に与えるファイルパスは args である。
-  args は、順番に意味があることが多い： `cp foo bar` は
-   `cp bar foo` とは異なる意味を持つ。
+  args は、順番に意味があることが多い： `cp foo bar` は `cp bar foo` とは異なる意味を持つ。
 - _フラグ_ とは、名前付きのパラメータで、1個のハイフンと1文字の名前（`-r`）か、もしくハイフン2個と複数文字の名前で指定する（`--recursive`）。
   ユーザが指定する値を含む場合もある（`--file foo.txt`、あるいは `--file=foo.txt`）。
-  一般的に、フラグの指定順が違っても、プログラムの動作に違いはない。
+  一般的に、フラグの指定順が違っても、プログラムの動作は変わらない。
 
 **args よりフラグを優先する。**
 タイプ量は増えるが、何が起こっているかは、はるかによくわかる。
@@ -694,3 +693,12 @@ UwlHnUFXgENO3ifPZd8zoSKMxESxxot4tMgvfXjmRp5G3BGrAnonncE7Aj11pn3SSYgEcrrn2sMyLGpV
 args だと、新しい入力を追加する際に、既存の挙動が変わったり、あいまいさが生まれたりするしかない場合もある。
 
 _引用: [12 Factor CLI Apps](https://medium.com/@jdxcode/12-factor-cli-apps-dd3c227a0e46)._
+
+**すべてのフラグに省略しない形も用意しておく。**
+例えば、`-h` と `--help` の両方を用意しておく。
+非省略形があれば、スクリプトをより詳細に、説明的に書くことができるので、いちいちフラグの意味を調べて回る必要がなくなる。
+
+引用: [GNU Coding Standards](https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html)._
+
+**1文字フラグは利用頻度の高いフラグだけに留める。** 特に、サブコマンドがある場合は、トップレベルだけに限定する。
+こうすれば、短いフラグの名前空間が「汚染」されることがなくなり、将来追加するフラグに、複雑な文字列や大文字小文字を割り当てる必要がなくなる。
