@@ -784,3 +784,6 @@ _引用: [12 Factor CLI Apps](https://medium.com/@jdxcode/12-factor-cli-apps-dd3
 ```
 $ curl https://example.com/something.tar.gz | tar xvf -
 ```
+
+**フラグにオプション値を渡せる場合、「none」のような特殊な単語も使えるようにしておく。**
+例えば、`ssh -F` には、オプションとして `ssh_config` の代替となるファイル名を与えることができ、`ssh -F none` とすることで、設定ファイルなしで SSH を起動できる。値として空白を認めてしまうと、引数がフラグの値なのか、引数なのかがあいまいになる。
