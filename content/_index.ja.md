@@ -868,3 +868,17 @@ _参考: [User experience, CLIs, and breaking the world, by John Starich](https:
 **反応の速さはスピードより重要。**
 100ミリ秒以下で何か出力すること。
 ネットワーク経由でリクエストを送るなら、その手前で何か出力する。こうすれば、ハングして壊れたように見えなくて済む。
+
+**時間のかかる処理は進行状況を表示する。**
+プログラムが長時間何も出力しないと、壊れたしたように見える。
+よくできたスピナーやプログレスインジケーターを利用すれば、プログラムが、実際より早く動作しているように見せることができる。
+
+Ubuntu 20.04 のプログレスバーは、ターミナルの底辺にくっつく気の利いた仕様になっている。
+
+<!-- (TK reproduce this as a code block or animated SVG) -->
+
+プログレスバーが長時間、1箇所で止まっていると、まだ動作しているのか、プログラムがクラッシュしてしまったのか、ユーザーには見分けがつかない。
+残り時間の予想を表示するか、あるいは動きのある部品を配置しておくとよい。まだ動作している、ということがしっかり伝えられる。
+
+プログレスバーの実装には、よいライブラリがたくさんある。
+例えば、Pythonなら[tqdm](https://github.com/tqdm/tqdm) 、Goなら[schollz/progressbar](https://github.com/schollz/progressbar)、Node.jsなら[node-progress](https://github.com/visionmedia/node-progress) が挙げられる。
