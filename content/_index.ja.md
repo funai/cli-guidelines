@@ -882,3 +882,18 @@ Ubuntu 20.04 のプログレスバーは、ターミナルの底辺にくっつ�
 
 プログレスバーの実装には、よいライブラリがたくさんある。
 例えば、Pythonなら[tqdm](https://github.com/tqdm/tqdm) 、Goなら[schollz/progressbar](https://github.com/schollz/progressbar)、Node.jsなら[node-progress](https://github.com/visionmedia/node-progress) が挙げられる。
+
+**なるべく並行処理を心がける。ただし、よく考えて。**
+シェルでは、単に進行状況を表示するだけでも、すでに大仕事である。並行処理でそれをやろうとすると、10倍は難しくなる。
+堅牢性を意識し、出力が交錯して混乱を招かないようにしよう。
+ライブラリが利用できるなら、そうしよう。自分で書きたくなるようなコードではないからだ。
+Pythonの[tqdm](https://github.com/tqdm/tqdm) や、Goの[schollz/progressbar](https://github.com/schollz/progressbar)といったライブラリでは、複数のプログレスバーをネイティブでサポートしている。
+
+ユーザビリティが大幅に向上するのが利点である。
+例えば、 `docker pull` では、複数プログレスバーのおかげで、現在の進行状況がよくわかる。
+
+<!-- (TK docker pull animation) -->
+
+注意したいこととして、_うまく_ いっているときは、プログレスバーを出して、ログは出さない方が、進行状況がわかりやすい。だが、エラーが起きたら、ログを出力すべきだ。
+でないと、デバッグが非常に難しくなる。
+
