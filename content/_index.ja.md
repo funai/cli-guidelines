@@ -905,7 +905,7 @@ Pythonの[tqdm](https://github.com/tqdm/tqdm) や、Goの[schollz/progressbar](h
 
 **クラッシュオンリーにする。**
 冪等性をさらに一歩進めよう。
-処理が終わったあと、特に後始末が要らない場合、または、次回起動時までほっておいても構わない場合、失敗したり、邪魔が入った時点ですぐに終了しよう。
+処理が終わったあと、特に後処理が要らない場合、または、次回起動時までほっておいても構わない場合、失敗したり、邪魔が入った時点ですぐに終了しよう。
 これにより、さらに堅牢で、反応のいいプログラムになる。
 
 _引用元: [Crash-only software: More than meets the eye](https://lwn.net/Articles/191059/)._
@@ -962,3 +962,22 @@ _引用元: [Crash-only software: More than meets the eye](https://lwn.net/Artic
 20年後になくなっている確率が最も高いのは、今、君がメンテナンスしているサーバーだ。
 （だからといって、処理の前に Google Analytics の応答を待つ、なんてコードは書かないように）
 
+### シグナルと制御文字 {#signals}
+
+**Ctrl-C （INT シグナル）が押されたら、できるだけすぐに終了する。**
+後処理をする前に、取り急ぎ何か表示する。
+後処理にはタイムアウトを設け、永久にハングすることがないようにする。
+
+**長い後処理の途中で Ctrl-C が押されたら、無視する**
+再度 Ctrl-C が押されたら、破壊的な挙動になる場合は、そのあとどうなるかを表示する。
+
+例えば、Docker Composeを終了する際に、 Ctrl-C を2度押すと、コンテナーは手順通りにシャットダウンせず、ただちに停止する。
+
+```
+$  docker-compose up
+…
+^CGracefully stopping... (press Ctrl+C again to force)
+```
+
+プログラムは、後処理が実行されていない状態で起動される場合も想定しておくべきである。
+（ [Crash-only software: More than meets the eye](https://lwn.net/Articles/191059/) 参照）
