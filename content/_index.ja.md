@@ -1018,8 +1018,26 @@ $  docker-compose up
 
 3. プロジェクト内では、ユーザーによらず安定している。
 
-    ヴァージョン管理されるようなタイプの設定である。
+    これは、ヴァージョン管理されるようなタイプの設定である。
     `Makefile`、 `package.json` それに `docker-compose.yml` といったファイルは、すべてこの例になる。
 
     おすすめ：**コマンドごとにヴァージョン管理されたファイルを使用する。**
+
+**XDG 仕様に準拠する。**
+2010年に、X Desktop Group、現在の [freedesktop.org](https://freedesktop.org) が開発した仕様には、設定ファイルの置き場となる基本的なディレクトリの位置が規定されている。
+その目標のひとつは、ユーザーのホームディレクトリがドットファイルであふれないようにすることで、そのために汎用の `~/.config` フォルダが設けられた。
+「The XDG Base Directory Specification」（[仕様原本](https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html)、 [要約](https://wiki.archlinux.org/index.php/XDG_Base_Directory#Specification)）は、yarn、 fish、 wireshark、 emacs、 neovim、 tmux、その他、有名で愛用者の多い数多くのプロジェクトで採用されている。
+
+**他のプログラムの設定を自動で書き換える場合は、ユーザーの同意を求め、何をするつもりなのかを正確に伝えること。**
+既存の設定ファイルに追記する（例： `/etc/crontab`）よりも、新しい設定ファイルを作る（例： `/etc/cron.d/myapp`）方が好ましい。
+システム共通の設定ファイルに追記、または変更を加える場合は、何を追加したのか、そのファイルに日付付きのコメントで残しておく。
+
+**優先順位に従って設定を適用する。**
+設定パラメーターの優先順位は、高いものから低いものに、以下の順で扱う：
+
+- フラグ
+- 実行中シェルの環境変数
+- プロジェクトごとの設定（例： `.env`）
+- ユーザーごとの設定
+- システム共通の設定
 
