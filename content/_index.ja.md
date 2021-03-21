@@ -600,7 +600,7 @@ drwxr-xr-x 2 root root   4.0K Jul 20 14:57 skel
 - オプション `--no-color` が指定されている場合。
 - 特定のプログラムだけ色をオフにしたい場合に備えて、環境変数 `MYAPP_NO_COLOR` を追加してもいい。
 
-_くわしくは： [no-color.org](https://no-color.org/), [12 Factor CLI Apps](https://medium.com/@jdxcode/12-factor-cli-apps-dd3c227a0e46)_
+_参考資料： [no-color.org](https://no-color.org/), [12 Factor CLI Apps](https://medium.com/@jdxcode/12-factor-cli-apps-dd3c227a0e46)_
 
 **`stdout` が対話式のターミナル出ない場合、アニメーションは表示しない。**
 こうすれば、プログレスバーが、CI のログ出力にクリスマスツリーのような形で残ることはなくなる。
@@ -1111,7 +1111,7 @@ CLIでは、プログラムの名前はことのほか重要だ。ユーザー�
 `apple` は同じ文字の連打ではまりやすい。
 `orange` はこれらより長いが、ずっと打ちやすい。
 
-_くわしくは： [The Poetics of CLI Command Names](https://smallstep.com/blog/the-poetics-of-cli-command-names/)_
+_参考資料： [The Poetics of CLI Command Names](https://smallstep.com/blog/the-poetics-of-cli-command-names/)_
 
 ### 配布 {#distribution}
 
@@ -1124,3 +1124,44 @@ _くわしくは： [The Poetics of CLI Command Names](https://smallstep.com/blo
 
 **簡単にアンインストールできるようにする。**
 手順が必要なら、インストール手順の最後に、そのことにも触れておく。ソフトウェアをインストールした直後に、アンインストールしたくなることがよくある。
+
+### ログ解析 {#analytics}
+
+利用状況を測定すれば、ユーザーがプログラムをどのように使用しているか、どうすればより良くなるか、どこに力を入れるべきかを理解するのに役立つ。
+だが、ウェブサイトとは違って、コマンドラインのユーザは自分の環境をコントロールできるのが当然と考えているため、プログラムがこっそりとバックグランドで何かをしていると驚いてしまう。
+
+**同意なしに利用状況やクラッシュ時のデータを収集しない。**
+いつか見つかって、ユーザーを怒らせることになるだろう。
+収集する対象、収集する理由、匿名性の程度、匿名化の手段、さらにその保持期間をはっきりと明示する。
+
+できるなら、ユーザーにデータ提供の意志を確認すること（オプトイン）。
+デフォルトで取得する（オプトアウト）なら、ウェブサイトや初回起動時にそのことを明確に伝え、解除しやすいようにしておく。
+
+利用状況の統計データを収集しているプロジェクトの例：
+
+- Angular.js は、機能の優先順位付けのため、という名目で [Google Analytics を使って詳細なログを収集している](https://angular.io/analytics)。
+  明示的なオプトインとなっている。
+  トラッキング ID はユーザー自身の Google Analytics のプロパティを指すように変更できるので、自分の組織内での Angular の利用状況をみることもできる。
+- Homebrew は計測データを Google Analytics に送っており、 [よくできた FAQ](https://docs.brew.sh/Analytics) で、その内容を詳細に説明している。
+- Next.js は [利用状況のデータを匿名化して収集](https://nextjs.org/telemetry) しており、デフォルトで有効になっている。
+
+**ログ収集の代替手段を考える。**
+
+- ウェブ上のドキュメントを利用する。
+  CLIツールの利用状況を知りたければ、もっとも知りたいユースケースを中心にドキュメントを揃えておき、それらのパフォーマンスを時系列で見ていく。
+  ドキュメント内でどんな言葉で検索されているかを見る。
+- ダウンロードを利用する。
+  大ざっぱではあるが、利用状況と、ユーザーの使用 OS を理解する指標にはなる。
+- ユーザーと対話する。
+  ツールがどのように利用されているか、ユーザーに聞いてみよう。
+  ドキュメントやレポジトリでも、フィードバックや機能要望を奨励し、フィードバックしてくれた人から、より多くの情報を引き出すようにする。
+
+_参考資料： [Open Source Metrics](https://opensource.guide/metrics/)_
+
+## 参考資料
+
+- [The Unix Programming Environment](https://en.wikipedia.org/wiki/The_Unix_Programming_Environment), Brian W. Kernighan and Rob Pike
+- [POSIX Utility Conventions](https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap12.html)
+- [Program Behavior for All Programs](https://www.gnu.org/prep/standards/html_node/Program-Behavior.html), GNU Coding Standards
+- [12 Factor CLI Apps](https://medium.com/@jdxcode/12-factor-cli-apps-dd3c227a0e46), Jeff Dickey
+- [CLI Style Guide](https://devcenter.heroku.com/articles/cli-style-guide), Heroku
